@@ -1,17 +1,21 @@
 // ============================================================================
-// PASSWORD PROTECTION FOR THE HOMEPAGE (/)
+// PASSWORD PROTECTION FOR THE ENTIRE SITE
 // ============================================================================
-// This is a Netlify Edge Function. It runs BEFORE index.html is served,
-// and blocks access until the correct password is entered. Right now this
-// only protects the homepage — details.html, rsvp.html, etc. are NOT
-// covered by this and remain publicly visible.
+// This is a Netlify Edge Function. It runs BEFORE any page on the site is
+// served (every page, not just the homepage), and blocks access until the
+// correct password is entered.
+//
+// Note: table-number/ has its OWN separate password on top of this one
+// (see table-number-auth.js). So a visitor needs this site-wide password
+// first, and then the Table Number password on top of that to reach that
+// specific page. That's intentional layered protection, not a bug.
 //
 // HOW TO SET THE PASSWORD (do this in the Netlify dashboard, not in code):
 //   1. Go to your site in Netlify → Project configuration →
 //      Environment variables.
 //   2. Add a new variable:
 //        Key:   HOME_PASSWORD
-//        Value: ThenComesMarriage
+//        Value: (the password you want guests to use)
 //      Mark it "Contains secret values", same value for all deploy
 //      contexts (same steps you already used for TABLE_NUMBER_PASSWORD).
 //   3. Trigger a redeploy for the variable to take effect.
@@ -19,10 +23,6 @@
 // HOW LOGIN PERSISTS: once someone enters the correct password, this sets
 // a cookie in their browser that lasts 24 hours, so they won't be asked
 // again until it expires or they clear cookies.
-//
-// TO PROTECT MORE PAGES LATER: add more paths to the "path" array in the
-// config export at the very bottom of this file, e.g.:
-//   path: ["/", "/index.html", "/details.html"]
 // ============================================================================
 
 const COOKIE_NAME = "home_auth";
@@ -200,8 +200,7 @@ function escapeHtml(str) {
 }
 
 // This tells Netlify which URLs should be intercepted by this function.
-// Both "/" and "/index.html" are covered since visitors could land on
-// either depending on how they type/link the URL.
+// "/*" means every page and asset on the site.
 export const config = {
-  path: ["/", "/index.html"],
+  path: "/*",
 };
