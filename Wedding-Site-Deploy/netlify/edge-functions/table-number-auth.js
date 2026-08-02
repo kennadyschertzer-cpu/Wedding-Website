@@ -43,7 +43,21 @@ export default async (request, context) => {
     );
   }
 
-  // Handle the password form submission
+  // Check for a valid session cookie FIRST — before looking at the request
+  // method at all, so that any future form added to this page (or a POST
+  // from elsewhere) doesn't get mistaken for a password attempt once
+  // someone's already logged in.
+  const cookieHeader = request.headers.get("cookie") || "";
+  const isAuthed = cookieHeader
+    .split(";")
+    .map((c) => c.trim())
+    .includes(`${COOKIE_NAME}=granted`);
+
+  if (isAuthed) {
+    return context.next();
+  }
+
+  // Not logged in yet. Handle the password gate's own form submission.
   if (request.method === "POST") {
     const form = await request.formData();
     const submitted = (form.get("password") || "").toString();
@@ -65,19 +79,7 @@ export default async (request, context) => {
     });
   }
 
-  // Check for a valid session cookie
-  const cookieHeader = request.headers.get("cookie") || "";
-  const isAuthed = cookieHeader
-    .split(";")
-    .map((c) => c.trim())
-    .includes(`${COOKIE_NAME}=granted`);
-
-  if (isAuthed) {
-    // Correct cookie present — let the real page through
-    return context.next();
-  }
-
-  // No valid cookie — show the password gate instead of the page
+  // Not logged in, and this is a normal page visit (GET) — show the gate.
   return new Response(renderPage({}), {
     status: 200,
     headers: { "content-type": "text/html; charset=utf-8" },

@@ -43,7 +43,24 @@ export default async (request, context) => {
     );
   }
 
-  // Handle the password form submission
+  // Check for a valid session cookie FIRST — before looking at the request
+  // method at all. This matters because the RSVP form (and any other form
+  // on the site) also submits via POST. If we checked "is this a POST?"
+  // before checking the cookie, an already-logged-in visitor's RSVP
+  // submission would get mistaken for a password attempt and blocked.
+  const cookieHeader = request.headers.get("cookie") || "";
+  const isAuthed = cookieHeader
+    .split(";")
+    .map((c) => c.trim())
+    .includes(`${COOKIE_NAME}=granted`);
+
+  if (isAuthed) {
+    // Already logged in — let EVERYTHING through untouched, GET or POST,
+    // homepage or RSVP form submission or anything else.
+    return context.next();
+  }
+
+  // Not logged in yet. Handle the password gate's own form submission.
   if (request.method === "POST") {
     const form = await request.formData();
     const submitted = (form.get("password") || "").toString();
@@ -65,19 +82,7 @@ export default async (request, context) => {
     });
   }
 
-  // Check for a valid session cookie
-  const cookieHeader = request.headers.get("cookie") || "";
-  const isAuthed = cookieHeader
-    .split(";")
-    .map((c) => c.trim())
-    .includes(`${COOKIE_NAME}=granted`);
-
-  if (isAuthed) {
-    // Correct cookie present — let the real homepage through
-    return context.next();
-  }
-
-  // No valid cookie — show the password gate instead of the page
+  // Not logged in, and this is a normal page visit (GET) — show the gate.
   return new Response(renderPage({}), {
     status: 200,
     headers: { "content-type": "text/html; charset=utf-8" },
@@ -95,8 +100,8 @@ function renderPage({ error }) {
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Kennady &amp; Noah</title>
-<link rel="preload" href="/fonts/exmouth_.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="preload" href="/fonts/Zanela-pglrR.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/fonts/exmouth_.woff2" as="font" type="font/woff2" crossorigin fetchpriority="high">
+<link rel="preload" href="/fonts/Zanela-pglrR.woff2" as="font" type="font/woff2" crossorigin fetchpriority="high">
 <style>
   @font-face{
     font-family: 'Exmouth';

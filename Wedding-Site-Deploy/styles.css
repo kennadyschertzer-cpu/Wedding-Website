@@ -116,25 +116,19 @@ nav .wrap{
   display:flex;
   justify-content:center;
   align-items:center;
-  gap: clamp(10px, 2.4vw, 34px);
-  padding: 16px 28px;
-  flex-wrap: nowrap;
-  overflow-x: auto;
-  -webkit-overflow-scrolling: touch;
-  scrollbar-width: none;
-}
-nav .wrap::-webkit-scrollbar{
-  display: none;
+  gap: clamp(12px, 2.8vw, 34px) clamp(16px, 3.5vw, 34px);
+  padding: 20px 28px;
+  flex-wrap: wrap;
+  row-gap: 12px;
 }
 nav a{
   text-decoration:none;
-  font-size: clamp(0.62rem, 1.6vw, 0.78rem);
-  letter-spacing: 0.12em;
+  font-size: clamp(0.68rem, 1.8vw, 0.78rem);
+  letter-spacing: 0.13em;
   text-transform: uppercase;
   color: var(--pine-mid);
   transition: color 0.2s ease;
   white-space: nowrap;
-  flex-shrink: 0;
 }
 nav a:hover, nav a:focus-visible{ color: var(--pine); }
 nav a.current{ color: var(--pine); border-bottom: 1px solid var(--pine); padding-bottom: 2px; }
@@ -414,7 +408,7 @@ main.main--roomy{
 /* ---- Placeholder cards (RSVP / Registry / Travel) ------------------ */
 .placeholder-card{
   background: var(--cream);
-  border: 1px solid var(--pine-faint);
+  border: none;
   border-radius: 2px;
   padding: 48px 40px;
   text-align:center;
