@@ -1,9 +1,10 @@
 // ============================================================================
-// PASSWORD PROTECTION FOR THE ENTIRE SITE
+// PASSWORD PROTECTION FOR THE SITE — EXCEPT THE RSVP PAGE
 // ============================================================================
 // This is a Netlify Edge Function. It runs BEFORE any page on the site is
-// served (every page, not just the homepage), and blocks access until the
-// correct password is entered.
+// served (every page EXCEPT rsvp.html — see "excludedPath" in the config
+// export at the bottom), and blocks access until the correct password
+// is entered.
 //
 // Note: table-number/ has its OWN separate password on top of this one
 // (see table-number-auth.js). So a visitor needs this site-wide password
@@ -23,6 +24,9 @@
 // HOW LOGIN PERSISTS: once someone enters the correct password, this sets
 // a cookie in their browser that lasts 24 hours, so they won't be asked
 // again until it expires or they clear cookies.
+//
+// TO EXCLUDE MORE PAGES LATER: add more paths to the "excludedPath" array
+// in the config export at the very bottom of this file.
 // ============================================================================
 
 const COOKIE_NAME = "home_auth";
@@ -44,10 +48,10 @@ export default async (request, context) => {
   }
 
   // Check for a valid session cookie FIRST — before looking at the request
-  // method at all. This matters because the RSVP form (and any other form
-  // on the site) also submits via POST. If we checked "is this a POST?"
-  // before checking the cookie, an already-logged-in visitor's RSVP
-  // submission would get mistaken for a password attempt and blocked.
+  // method at all. This matters because forms on the site also submit via
+  // POST. If we checked "is this a POST?" before checking the cookie, an
+  // already-logged-in visitor's form submission would get mistaken for a
+  // password attempt and blocked.
   const cookieHeader = request.headers.get("cookie") || "";
   const isAuthed = cookieHeader
     .split(";")
@@ -55,8 +59,7 @@ export default async (request, context) => {
     .includes(`${COOKIE_NAME}=granted`);
 
   if (isAuthed) {
-    // Already logged in — let EVERYTHING through untouched, GET or POST,
-    // homepage or RSVP form submission or anything else.
+    // Already logged in — let EVERYTHING through untouched.
     return context.next();
   }
 
@@ -224,7 +227,10 @@ function escapeHtml(str) {
 }
 
 // This tells Netlify which URLs should be intercepted by this function.
-// "/*" means every page and asset on the site.
+// "/*" means every page and asset on the site, EXCEPT whatever is listed
+// in excludedPath — currently just rsvp.html, so that page loads with no
+// password prompt at all while everything else stays protected.
 export const config = {
   path: "/*",
+  excludedPath: "/rsvp.html",
 };
