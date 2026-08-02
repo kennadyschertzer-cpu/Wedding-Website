@@ -761,6 +761,39 @@ header.hero .countdown-row{ animation-delay: 0.32s; }
 .party-column:nth-child(2){ animation-delay: 0.1s; }
 
 /* ======================================================================
+   PAGE PRELOADER — full-screen cover shown until fonts/images finish
+   loading, then fades out. See preload.js for the logic.
+   ====================================================================== */
+.page-loader{
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: var(--sage);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 0.5s ease, visibility 0.5s ease;
+}
+.page-loader.loaded{
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+.loader-spinner{
+  width: 34px;
+  height: 34px;
+  border: 2px solid var(--pine-faint);
+  border-top-color: var(--pine);
+  border-radius: 50%;
+  animation: loader-spin 0.9s linear infinite;
+}
+@keyframes loader-spin{
+  to{ transform: rotate(360deg); }
+}
+
+/* ======================================================================
    ACCESSIBILITY — please keep these
    ====================================================================== */
 a:focus-visible, button:focus-visible{

@@ -8,7 +8,7 @@
 //
 // If something takes unusually long (a slow connection, a resource that
 // never finishes loading, etc.), a safety timeout force-hides the loader
-// after 4 seconds so a visitor is never stuck staring at a blank screen.
+// after 15 seconds so a visitor is never stuck staring at a blank screen.
 //
 // This file is shared by every page — edit it once here and every page
 // picks up the change. Each page just needs:
@@ -42,5 +42,7 @@
   Promise.all([fontsReady, windowLoaded]).then(hideLoader);
 
   // Safety net — never leave a visitor stuck on the loading screen.
-  setTimeout(hideLoader, 4000);
+  // Extended to give slower connections plenty of buffer time before
+  // force-revealing the page.
+  setTimeout(hideLoader, 15000);
 })();
