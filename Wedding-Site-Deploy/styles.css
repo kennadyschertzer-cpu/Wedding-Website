@@ -287,7 +287,7 @@ header.hero{
    SECTION / PAGE BODY
    ====================================================================== */
 main{
-  padding: 20px 0 100px;
+  padding: 20px 0 140px;
 }
 
 /* ---- Details page grid (legacy — kept in case you want a grid layout
@@ -548,7 +548,7 @@ main{
 .amp{
   display: inline-block;
   transform: translateY(-0.16em);
-  margin-right: -0.14em;
+  margin-right: -0.24em;
 }
 
 /* ---- Wedding Party page ----------------------------------------------
@@ -580,7 +580,7 @@ main.party-page{
 .party-title{
   font-family: var(--script);
   font-weight: 400;
-  font-size: clamp(1.9rem, 4.5vw, 2.4rem);
+  font-size: clamp(2.2rem, 5.2vw, 2.8rem);
   color: var(--pine);
   margin-bottom: 20px;
 }
@@ -590,7 +590,7 @@ main.party-page{
   justify-content: center;
   align-items: baseline;
   gap: 14px 50px;
-  font-size: 1.15rem;
+  font-size: 1.4rem;
   color: var(--pine-mid);
 }
 
@@ -609,8 +609,8 @@ main.party-page{
   padding: 0;
   margin: 0;
   color: var(--pine-mid);
-  font-size: 1.05rem;
-  line-height: 2;
+  font-size: 1.25rem;
+  line-height: 2.1;
 }
 
 @media (max-width: 640px){
