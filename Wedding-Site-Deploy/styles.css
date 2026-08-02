@@ -149,7 +149,7 @@ header.hero{
   align-items:center;
   justify-content:center;
   text-align:center;
-  padding: 60px 28px;
+  padding: 60px 28px 140px;
 }
 
 .eyebrow{
@@ -205,6 +205,39 @@ header.hero{
   color: var(--pine-mid);
   line-height: 1;
   margin: 2px 0;
+}
+
+/* ---- Countdown timer (homepage) ------------------------------------ */
+.countdown-row{
+  display: flex;
+  justify-content: center;
+  gap: clamp(20px, 5vw, 44px);
+  margin-top: 48px;
+}
+.countdown-item{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.countdown-number{
+  font-family: var(--serif);
+  font-size: clamp(1.8rem, 5vw, 2.6rem);
+  color: var(--pine);
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+.countdown-label{
+  font-size: 0.66rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--pine-mid);
+  margin-top: 8px;
+}
+.countdown-married{
+  font-family: var(--script);
+  font-weight: 400;
+  font-size: clamp(2rem, 5vw, 2.6rem);
+  color: var(--pine);
 }
 
 /* ---- Hero image square -------------------------------------------
@@ -287,7 +320,7 @@ header.hero{
    SECTION / PAGE BODY
    ====================================================================== */
 main{
-  padding: 20px 0 140px;
+  padding: 20px 0 180px;
 }
 
 /* ---- Details page grid (legacy — kept in case you want a grid layout
@@ -340,6 +373,9 @@ main{
   flex-wrap: wrap;
   gap: 14px;
   margin-top: 8px;
+}
+.directions-row + .directions-row{
+  margin-top: 18px;
 }
 .directions-btn{
   display: inline-block;
@@ -666,6 +702,7 @@ header.hero .eyebrow,
 header.hero .names,
 header.hero .hero-image-square,
 header.hero .hero-meta,
+header.hero .countdown-row,
 .page-header .kicker,
 .page-header h1,
 .page-header .divider-mark,
@@ -682,6 +719,7 @@ footer{
 header.hero .names{ animation-delay: 0.08s; }
 header.hero .hero-image-square{ animation-delay: 0.16s; }
 header.hero .hero-meta{ animation-delay: 0.24s; }
+header.hero .countdown-row{ animation-delay: 0.32s; }
 
 .page-header h1{ animation-delay: 0.08s; }
 .page-header .divider-mark{ animation-delay: 0.16s; }

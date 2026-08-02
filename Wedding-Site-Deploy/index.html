@@ -50,7 +50,74 @@
     <span class="meta-line">Old Monroe Distilling Co.</span>
     <span class="meta-line meta-sub">Columbia, Illinois</span>
   </div>
+
+  <!--
+    COUNTDOWN TIMER
+    Counts down to the ceremony start time, set below. If you change the
+    wedding date/time, update the date in the JavaScript Date() call in
+    the <script> tag at the bottom of this file (search for "TARGET_DATE").
+    Once the countdown hits zero, it automatically swaps to a "married!"
+    message instead of showing negative numbers.
+  -->
+  <div class="countdown-row" id="countdown-row">
+    <div class="countdown-item">
+      <span class="countdown-number" id="cd-days">--</span>
+      <span class="countdown-label">Days</span>
+    </div>
+    <div class="countdown-item">
+      <span class="countdown-number" id="cd-hours">--</span>
+      <span class="countdown-label">Hours</span>
+    </div>
+    <div class="countdown-item">
+      <span class="countdown-number" id="cd-minutes">--</span>
+      <span class="countdown-label">Minutes</span>
+    </div>
+    <div class="countdown-item">
+      <span class="countdown-number" id="cd-seconds">--</span>
+      <span class="countdown-label">Seconds</span>
+    </div>
+  </div>
 </header>
+
+<script>
+  // TARGET_DATE — the ceremony start time. Written with -05:00 (Central
+  // Daylight Time, what Columbia, IL uses in October) so the countdown
+  // is accurate no matter what timezone a visitor is browsing from.
+  // If the date/time ever changes, just update this one line.
+  var TARGET_DATE = new Date('2027-10-09T17:00:00-05:00');
+
+  (function () {
+    var row = document.getElementById('countdown-row');
+    var daysEl = document.getElementById('cd-days');
+    var hoursEl = document.getElementById('cd-hours');
+    var minutesEl = document.getElementById('cd-minutes');
+    var secondsEl = document.getElementById('cd-seconds');
+
+    function tick() {
+      var now = new Date();
+      var diff = TARGET_DATE - now;
+
+      if (diff <= 0) {
+        row.innerHTML = '<span class="countdown-married">We&rsquo;re Married!</span>';
+        clearInterval(timer);
+        return;
+      }
+
+      var days = Math.floor(diff / (1000 * 60 * 60 * 24));
+      var hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+      var minutes = Math.floor((diff / (1000 * 60)) % 60);
+      var seconds = Math.floor((diff / 1000) % 60);
+
+      daysEl.textContent = days;
+      hoursEl.textContent = String(hours).padStart(2, '0');
+      minutesEl.textContent = String(minutes).padStart(2, '0');
+      secondsEl.textContent = String(seconds).padStart(2, '0');
+    }
+
+    tick();
+    var timer = setInterval(tick, 1000);
+  })();
+</script>
 
 <footer>
   <div class="names-small">Kennady <span class="amp">&amp;</span> Noah</div>
